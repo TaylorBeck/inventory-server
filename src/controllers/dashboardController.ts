@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -11,42 +11,44 @@ export const getDashboardMetrics = async (
     const popularProducts = await prisma.products.findMany({
       take: 15,
       orderBy: {
-        stockQuantity: "desc"
-      }
+        stockQuantity: 'desc',
+      },
     });
-    
+
     const salesSummary = await prisma.salesSummary.findMany({
       take: 5,
       orderBy: {
-        date: "desc"
-      }
+        date: 'desc',
+      },
     });
 
     const purchaseSummary = await prisma.purchaseSummary.findMany({
       take: 5,
       orderBy: {
-        date: "desc"
-      }
+        date: 'desc',
+      },
     });
 
     const expenseSummary = await prisma.expenseSummary.findMany({
       take: 5,
       orderBy: {
-        date: "desc"
-      }
+        date: 'desc',
+      },
     });
 
-    const expenseByCategorySummaryRaw = await prisma.expenseByCategory.findMany({
-      take: 5,
-      orderBy:{
-        date: "desc"
+    const expenseByCategorySummaryRaw = await prisma.expenseByCategory.findMany(
+      {
+        take: 5,
+        orderBy: {
+          date: 'desc',
+        },
       }
-    });
+    );
 
     // Format expense data for frontend dashboard
-    const expenseByCategorySummary = expenseByCategorySummaryRaw.map((item) => ({
+    const expenseByCategorySummary = expenseByCategorySummaryRaw.map(item => ({
       ...item,
-      amount: item.amount.toString()
+      amount: item.amount.toString(),
     }));
 
     res.json({
@@ -54,9 +56,9 @@ export const getDashboardMetrics = async (
       salesSummary,
       purchaseSummary,
       expenseSummary,
-      expenseByCategorySummary
+      expenseByCategorySummary,
     });
-  } catch(error) {
-    res.status(500).json({ message: "Error retrieving dashboard metrics" });
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving dashboard metrics' });
   }
-}
+};
